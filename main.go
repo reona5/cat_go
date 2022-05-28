@@ -12,7 +12,7 @@ var (
 )
 
 func init() {
-	flag.BoolVar(&isNumber, "n", true, "Line number is visible when it's true.")
+	flag.BoolVar(&isNumber, "n", false, "Line number is visible when it's true.")
 }
 
 func main() {
@@ -35,9 +35,15 @@ func readFile(fn string) {
 }
 
 func scanLines(f *os.File) {
+	line := 1
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		fmt.Fprintln(os.Stdout, scanner.Text())
+		if isNumber {
+			fmt.Fprintln(os.Stdout, line, scanner.Text())
+			line++
+		} else {
+			fmt.Fprintln(os.Stdout, scanner.Text())
+		}
 	}
 
 	if err := scanner.Err(); err != nil {
